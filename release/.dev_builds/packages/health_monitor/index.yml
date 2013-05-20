@@ -1,0 +1,10 @@
+---
+builds:
+  !binary "YThiY2FlMWQ2OTQ5NmE1ZmZkNTlhNjI1ODY0OWQ0ZjUyYmY5NGIwMQ==":
+    version: 5.1-dev
+    sha1: !binary |-
+      YjQ4YThkM2RmZDY0YjNmYzRiNTg2OTI5ZTQ2Njg3YjY5MzY1ZGZmYg==
+  !binary "OWIzODdiZjZiNDA5NmI5OTBkMjgwNzU5ODE3MTY2MTE0ODY2N2NiMQ==":
+    version: 5.2-dev
+    sha1: !binary |-
+      NjUxZGM2MzM1MjRjZWM0OGIyMWJjZWM5YTkwYzQ2YjU5NzAzZDYzOA==

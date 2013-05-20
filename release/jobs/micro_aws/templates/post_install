@@ -1,0 +1,14 @@
+#!/bin/sh
+
+for DIR in /var/vcap/jobs /var/vcap/data/jobs; do
+  cd $DIR
+  for JOB in nats redis postgres powerdns blobstore director health_monitor registry; do
+    mkdir -p ${JOB}/bin ${JOB}/config
+    for FILE in micro_aws/$JOB/bin/*; do
+      ln -nsf ../../$FILE $JOB/bin
+    done
+    for FILE in micro_aws/$JOB/config/*; do
+      ln -nsf ../../$FILE $JOB/config
+    done
+  done
+done

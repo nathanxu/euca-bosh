@@ -1,0 +1,375 @@
+---
+name: micro_vsphere
+templates:
+  post_install: bin/post_install
+  nats/nats_ctl.erb: nats/bin/nats_ctl
+  nats/nats.yml.erb: nats/config/nats.yml
+  redis/redis_ctl: redis/bin/redis_ctl
+  redis/redis.conf.erb: redis/config/redis.conf
+  postgres/postgres_ctl.erb: postgres/bin/postgres_ctl
+  postgres/postgres.conf.erb: postgres/config/postgres.conf
+  powerdns/access_list.erb: powerdns/config/access_list
+  powerdns/nginx.conf.erb: powerdns/config/nginx.conf
+  powerdns/nginx_ctl.erb: powerdns/bin/nginx_ctl
+  powerdns/pdns.conf.erb: powerdns/config/pdns.conf
+  powerdns/pg_hba.conf.erb: powerdns/config/pg_hba.conf
+  powerdns/postgres_ctl.erb: powerdns/bin/postgres_ctl
+  powerdns/postgresql.conf.erb: powerdns/config/postgresql.conf
+  powerdns/powerdns_ctl.erb: powerdns/bin/powerdns_ctl
+  powerdns/recovery.conf.erb: powerdns/config/recovery.conf
+  blobstore/nginx_ctl: blobstore/bin/nginx_ctl
+  blobstore/blobstore_ctl: blobstore/bin/blobstore_ctl
+  blobstore/blobstore.yml.erb: blobstore/config/blobstore.yml
+  blobstore/nginx.conf.erb: blobstore/config/nginx.conf
+  blobstore/blobstore.conf.erb: blobstore/config/sites/blobstore.conf
+  blobstore/mime.types: blobstore/config/mime.types
+  director/director_ctl: director/bin/director_ctl
+  director/director.yml.erb: director/config/director.yml.erb
+  director/worker_ctl: director/bin/worker_ctl
+  director/drain: director/bin/drain
+  director/sudoers: director/config/sudoers
+  director/stemcell-copy.sh: director/bin/stemcell-copy
+  director/task_logrotate.sh: director/bin/task_logrotate
+  director/task_logrotate.cron: director/config/task_logrotate.cron
+  health_monitor/health_monitor_ctl: health_monitor/bin/health_monitor_ctl
+  health_monitor/health_monitor.yml.erb: health_monitor/config/health_monitor.yml
+packages:
+- nats
+- ruby
+- redis
+- postgres
+- nginx
+- powerdns
+- blobstore
+- director
+- genisoimage
+- libpq
+- health_monitor
+properties:
+  nats.listen_address:
+    description: IP address nats mbus listens on
+    default: 0.0.0.0
+  nats.port:
+    description: Port of the NATS message bus port to connect to
+    default: 4222
+  nats.no_epoll:
+    description: Disable epoll (Linux)
+    default: false
+  nats.no_kqueue:
+    description: Disable kqueue (MacOSX and BSD)
+    default: true
+  nats.ping_interval:
+    description: Time interval (in seconds) pings from server
+    default: 5
+  nats.ping_max_outstanding:
+    description: Maximum number of pings before declaring a client unresponsive
+    default: 2
+  nats.user:
+    description: User for the NATS message bus connection
+  nats.password:
+    description: Password for NATS message bus connection
+  nats.auth_timeout:
+    description: Timeout (in seconds) for clients to send auth credentials
+    default: 1
+  nats.http.port:
+    description: TCP port NATS listens on for HTTP connections (optional)
+    default: 9222
+  nats.http.user:
+    description: Username clients must use to access nats mbus via HTTP connection
+      (optional)
+  nats.http.password:
+    description: Password clients must use to access nats mbus via HTTP connection
+      (optional)
+  redis.password:
+    description: Password of the redis server
+  redis.port:
+    description: Port that the redis server listens on
+    default: 25255
+  redis.listen_address:
+    description: IP address Redis server listens on (optional)
+  postgres.port:
+    description: Port of the director database (postgres)
+    default: 5432
+  postgres.listen_address:
+    description: IP address Postgres listens on
+    default: 0.0.0.0
+  postgres.user:
+    description: Username used for the director database (postgres)
+  postgres.password:
+    description: Password used for the director database (postgres)
+  postgres.database:
+    description: Name of the director database (postgres)
+  dns.database.port:
+    description: Port that the powerdns database listens on (postgres in powerdns
+      job)
+    default: 5432
+  dns.user:
+    description: DNS Database user (postgres in powerdns job)
+  dns.password:
+    description: DNS Database password (postgres in powerdns job)
+  dns.database.name:
+    description: Name of the powerdns database (postgres in powerdns job)
+  dns.recursor:
+    description: If recursion is desired, IP address of a recursing nameserver (optional)
+  dns.webserver.port:
+    description: TCP port PowerDNS webserver listens on (optional)
+    default: 8081
+  dns.webserver.address:
+    description: IP address PowerDNS webserver listens on (optional)
+    default: 0.0.0.0
+  dns.webserver.password:
+    description: Password clients must use to access PowerDNS webserver (optional)
+  dns.address:
+    description: Address of the powerdns server
+  dns.replication.user:
+    description: Username for the HA replication process
+  dns.replication.password:
+    description: Password for the HA replication process
+  dns.replication.basic_auth:
+    description: username:encrypted-password (HTTP Basic Authentication) for the HA
+      replication process
+  blobstore.port:
+    description: Port of blobstore server used by simple blobstore plugin
+    default: 25250
+  blobstore.backend_port:
+    description: TCP port backend blobstore server (simple blobstore) listens on
+    default: 25251
+  blobstore.director.user:
+    description: Username director uses to connect to blobstore used by simple blobstore
+      plugin
+  blobstore.director.password:
+    description: Password director uses to connect to blobstore used by simple blobstore
+      plugin
+  blobstore.agent.user:
+    description: Username agent uses to connect to blobstore used by simple blobstore
+      plugin
+  blobstore.agent.password:
+    description: Password agent uses to connect to blobstore used by simple blobstore
+      plugin
+  director.name:
+    description: Name of the director
+  director.port:
+    description: Port of the Bosh Director to connect to
+    default: 25555
+  director.encryption:
+    description: Enable/Disable agent-director encryption (true|false)
+    default: false
+  director.max_tasks:
+    description: Max number of tasks to keep in disk
+    default: 500
+  director.max_threads:
+    description: Max number of director concurrent threads
+    default: 32
+  redis.address:
+    description: Address of the redis server
+  redis.loglevel:
+    description: Level of log messages for Redis connections (fatal, error, warn,
+      info, debug)
+    default: info
+  nats.address:
+    description: Address of the NATS message bus to connect to
+  postgres.address:
+    description: Address of the director database (postges)
+  dns.domain_name:
+    description: TLD of the dns zone used by bosh
+  blobstore.provider:
+    description: Provider of the blobstore used by director and agent (simple|s3)
+    default: simple
+  blobstore.bucket_name:
+    description: AWS S3 Bucket used by s3 blobstore plugin
+  blobstore.access_key_id:
+    description: AWS access_key_id used by s3 blobstore plugin
+  blobstore.secret_access_key:
+    description: AWS secret_access_key used by s3 blobstore plugin
+  blobstore.address:
+    description: Addess of blobstore server used by simple blobstore plugin
+  compiled_package_cache.provider:
+    description: Provider of the blobstore used for the compiled package cache
+    default: s3
+  compiled_package_cache.options.bucket_name:
+    description: AWS S3 Bucket used for the compiled package cache
+  compiled_package_cache.options.access_key_id:
+    description: AWS access_key_id used for the compiled package cache
+  compiled_package_cache.options.secret_access_key:
+    description: AWS secret_access_key used for the compiled package cache
+  ntp:
+    description: List of ntp server IPs
+    default: []
+  agent.blobstore.access_key_id:
+    description: AWS access_key_id for agent used by s3 blobstore plugin
+  agent.blobstore.secret_access_key:
+    description: AWS secret_access_key for agent used by s3 blobstore plugin
+  agent.blobstore.address:
+    description: Address for agent to connect to blobstore server used by simple blobstore
+      plugin
+  agent.blobstore.port:
+    description: Port for agent to connect to blobstore server used by simple blobstore
+      plugin
+  agent.nats.address:
+    description: Address for agent to connect to nats
+  registry.address:
+    description: Address of the Registry to connect to
+  registry.http.port:
+    description: Port of the Registry to connect to
+    default: 25777
+  registry.http.user:
+    description: User to access the Registry
+  registry.http.password:
+    description: Password to access the Registry
+  aws.access_key_id:
+    description: AWS access_key_id for aws cpi
+  aws.secret_access_key:
+    description: AWS secret_access_key for aws cpi
+  aws.default_key_name:
+    description: Default ssh keypair used by aws cpi when creating vms
+  aws.default_security_groups:
+    description: Default security group used by aws cpi
+  aws.region:
+    description: AWS Region used by aws cpi
+  aws.stemcell.kernel_id:
+    description: AWS kernel id used by aws cpi
+  openstack.auth_url:
+    description: URL of the OpenStack Identity endpoint to connect to
+  openstack.username:
+    description: OpenStack user name
+  openstack.api_key:
+    description: OpenStack API key
+  openstack.tenant:
+    description: OpenStack tenant name
+  openstack.region:
+    description: OpenStack region (optional)
+  openstack.endpoint_type:
+    description: OpenStack endpoint type (optional, by default publicURL)
+    default: publicURL
+  openstack.default_key_name:
+    description: Default OpenStack keypair to use when spinning up new vms
+  openstack.default_security_groups:
+    description: Default OpenStack security groups to use when spinning up new vms
+  vcenter.address:
+    description: Address of vCenter server used by vsphere cpi
+  vcenter.user:
+    description: User to connect to vCenter server used by vsphere cpi
+  vcenter.password:
+    description: Password to connect to vCenter server used by vspher cpi
+  vcenter.datacenters:
+    description: Datacenters in vCenter to use (value is an array of Hashes representing
+      datacenters and clusters, See director.yml.erb)
+  vcd.url:
+    description: TODO
+  vcd.user:
+    description: TODO
+  vcd.password:
+    description: TODO
+  vcd.entities.organization:
+    description: TODO
+  vcd.entities.virtual_datacenter:
+    description: TODO
+  vcd.entities.vapp_catalog:
+    description: TODO
+  vcd.entities.media_catalog:
+    description: TODO
+  vcd.entities.vm_metadata_key:
+    description: TODO
+    default: vcd-cf
+  vcd.entities.description:
+    description: TODO
+    default: vcd-cf
+  hm.http.port:
+    description: TCP port Health Monitor daemon listens on
+    default: 25923
+  hm.http.user:
+    description: Username clients must use to access Health Monitor via HTTP Basic
+      Auth
+  hm.http.password:
+    description: Password clients must use to access Health Monitor via HTTP Basic
+      Auth
+  hm.intervals.prune_events:
+    description: Interval (in seconds) to prune received events
+    default: 30
+  hm.intervals.poll_director:
+    description: Interval (in seconds) to get the list of managed VMs from Bosh Director
+    default: 60
+  hm.intervals.poll_grace_period:
+    description: Interval (in seconds) between discovering managed VMs and analyzing
+      their status
+    default: 30
+  hm.intervals.log_stats:
+    description: Interval (in seconds) to log Health Monitor statistics
+    default: 60
+  hm.intervals.analyze_agents:
+    description: Interval (in seconds) to analyze the status of agents
+    default: 60
+  hm.intervals.agent_timeout:
+    description: Interval (in seconds) to consider an agent has timed out
+    default: 60
+  hm.intervals.rogue_agent_alert:
+    description: Interval (in seconds) to consider an agent as rogue (an agent that
+      is no part of any deployment)
+    default: 120
+  hm.loglevel:
+    description: Level of log messages (fatal, error, warn, info, debug)
+    default: info
+  director.address:
+    description: Address of the Bosh Director to connect to
+  hm.director_account.user:
+    description: User to access Bosh Director
+  hm.director_account.password:
+    description: Password to access Bosh Director
+  event_nats_enabled:
+    description: Enable event NATS message bus plugin
+    default: false
+  event_nats.address:
+    description: Address of the event NATS message bus to connect to
+  event_nats.port:
+    description: Port of the event NATS message bus port to connect to
+  event_nats.user:
+    description: User for the event NATS message bus connection
+  event_nats.password:
+    description: Password for event NATS message bus connection
+  hm.email_notifications:
+    description: Enable email notifications plugin
+    default: false
+  hm.email_recipients:
+    description: Email of recipients (Array)
+  hm.smtp.from:
+    description: Email of sender
+  hm.smtp.host:
+    description: Address of the SMTP server to connect to
+  hm.smtp.port:
+    description: Port of the SMTP server to connect to
+  hm.smtp.domain:
+    description: SMTP EHLO domain
+  hm.smtp.tls:
+    description: Use STARTTLS (optional)
+  hm.smtp.auth:
+    description: SMTP Authentication type (optional, only "plain" is supported)
+  hm.smtp.user:
+    description: User for SMTP Authentication (optional, use in conjuction with hm.smtp.auth)
+  hm.smtp.password:
+    description: Password for SMTP Authentication (optional, use in conjuction with
+      hm.smtp.auth)
+  hm.email_interval:
+    description: Interval (in seconds) to deliver alerts by email (optional)
+  hm.tsdb_enabled:
+    description: Enable TSDB plugin
+    default: false
+  hm.tsdb.address:
+    description: Address of TSDB to connect to
+  hm.tsdb.port:
+    description: Port of TSDB to connect to
+  hm.pagerduty_enabled:
+    description: Enable PagerDuty plugin
+    default: false
+  hm.pagerduty.service_key:
+    description: PagerDuty service API key
+  hm.pagerduty.http_proxy:
+    description: HTTP proxy to connect to PagerDuty (optional)
+  hm.varz_enabled:
+    description: Enable /varz plugin
+    default: false
+  hm.cloud_watch_enabled:
+    description: Enable AWS CloudWatch Plugin
+    default: false
+  hm.resurrector_enabled:
+    description: Enable VM resurrector plugin
+    default: false

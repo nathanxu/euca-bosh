@@ -1,0 +1,14 @@
+---
+builds:
+  !binary "NjFmYTE3NDIyODYwOWRiZGYzODE1NzhkOGRlZGUwZWQ5ODk4YmNmMw==":
+    version: 11.1-dev
+    sha1: !binary |-
+      NGI1NTI5YTM0YmU3ZTI1YzU3YzQ0MjBlOTU1ZmE5NzlhNjM0YjU0MQ==
+  !binary "NTY4Mjc1NzY1ZmYxYzdiNGU0MTMzNjQyODM4MTI3ZGZkOGE2MzJmZg==":
+    version: 11.2-dev
+    sha1: !binary |-
+      ZjIzZWRmMmUyZTE2MDQ2NzI0ZDlmNWY2OTYyNTczMDBlZDcwNjcxNw==
+  !binary "NmQzZjNjMzFiY2RhZGY1YmJlOTIxMTM3YTQzMjcwMTM2YjM0MzBiMw==":
+    version: 11.3-dev
+    sha1: !binary |-
+      YWM4ZWUxMWFhMTk0ZGQzNWFhMDBhZjA1MjAxMWVjZmJlNTBkMTJkNg==

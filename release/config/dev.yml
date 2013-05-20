@@ -1,0 +1,3 @@
+---
+dev_name: bosh
+latest_release_filename: /data/vcap/bootstrap/bosh/release/dev_releases/bosh-13.1-dev.yml

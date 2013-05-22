@@ -7,6 +7,7 @@ module Bosh::Registry
     class Aws < InstanceManager
 
       AWS_MAX_RETRIES = 2
+      DEFAULT_EC2_ENDPOINT = "169.254.169.254"
 
       def initialize(cloud_config)
         validate_options(cloud_config)
@@ -18,7 +19,7 @@ module Bosh::Registry
           :access_key_id => @aws_properties["access_key_id"],
           :secret_access_key => @aws_properties["secret_access_key"],
           :max_retries => @aws_properties["max_retries"] || AWS_MAX_RETRIES,
-          :ec2_endpoint => @aws_properties["ec2_endpoint"], #"ec2.#{@aws_properties['region']}.amazonaws.com",
+          :ec2_endpoint => @aws_properties["ec2_endpoint"] || DEFAULT_EC2_ENDPOINT, #"ec2.#{@aws_properties['region']}.amazonaws.com",
           :ec2_service_path => @aws_properties["service_path"] || "/services/Eucalyptus",
           :ec2_port => @aws_properties["ec2_port"] || 8773,
           :use_ssl => false,

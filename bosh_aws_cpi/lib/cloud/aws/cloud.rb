@@ -7,7 +7,7 @@ module Bosh::AwsCloud
 
     # default maximum number of times to retry an AWS API call
     DEFAULT_MAX_RETRIES = 2
-    DEFAULT_EC2_ENDPOINT = "ec2.amazonaws.com"
+    DEFAULT_EC2_ENDPOINT = "169.254.169.254"
     DEFAULT_ELB_ENDPOINT = "elasticloadbalancing.amazonaws.com"
     METADATA_TIMEOUT = 5 # in seconds
     DEVICE_POLL_TIMEOUT = 60 # in seconds

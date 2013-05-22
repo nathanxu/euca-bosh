@@ -127,6 +127,8 @@ properties:
     description: User to access the Registry
   registry.http.password:
     description: Password to access the Registry
+  aws.ec2_endpoint:
+    description: AWS ec2 service endpoint
   aws.access_key_id:
     description: AWS access_key_id for aws cpi
   aws.secret_access_key:
